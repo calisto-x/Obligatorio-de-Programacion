@@ -1,0 +1,143 @@
+Imports System.Data.Odbc
+
+Public Class frmAltaPersona
+    Private Sub btnAgregarPersona_Click(sender As Object, e As EventArgs) Handles btnAgregarPersona.Click
+
+        If AgrgarRegistro(Integer.Parse(txtCedula.Text), txt_primer_nombre.Text,
+        txt_segundo_nombre.Text, txt_primer_apellido.Text, txt_segundo_apellido.Text) = True Then
+
+            MsgBox("Registro Agregado Satisfactoriamente !")
+
+            limpiarFormulario()
+
+        End If
+
+    End Sub
+
+    Private Sub limpiarFormulario()
+
+        txtCedula.Clear()
+        txt_primer_nombre.Clear()
+        txt_segundo_nombre.Clear()
+        txt_primer_apellido.Clear()
+        txt_segundo_apellido.Clear()
+
+    End Sub
+
+    Public Function AgrgarRegistro(cedula As Integer,
+                                   primer_nombre As String,
+                                   segundo_nombre As String,
+                                   primer_apellido As String,
+                                   segundo_apellido As String) As Boolean
+
+        Dim conODBC As New OdbcConnection("dsn=MyConexionOdbc;uid=root;pwd=root;")
+
+        Dim guardado As Boolean = False
+
+        Dim consulta As String = "INSERT INTO personas ("
+        ' consulta = a lo que ya tiene consulta + el valor que le quiero concatenar
+        consulta = consulta & " cedula, primer_nombre, segundo_nombre, "
+        consulta = consulta & " primer_apellido, segundo_apellido "
+        consulta = consulta &  ") VALUES ( "
+        consulta = consulta & cedula.ToString & ","
+        consulta = consulta & "'" & primer_nombre & "',"
+        consulta = consulta & "'" & segundo_nombre & "',"
+        consulta = consulta & "'" & primer_apellido & "',"
+        consulta = consulta & "'" & segundo_apellido & "')"
+
+        Dim command As New OdbcCommand(consulta, conODBC)
+
+        Try
+            conODBC.Open()
+            command.ExecuteNonQuery()
+            conODBC.Close()
+            guardado = True
+
+        Catch ex As Exception
+            MsgBox("Error : " & ex.Message)
+        End Try
+
+        Return guardado
+
+    End Function
+
+    Private Sub btnSalir_Click(sender As Object, e As EventArgs) Handles btnSalir.Click
+        Me.Close()
+    End Sub
+End Class
+
+Imports System.Data.Common
+Imports System.Data.Odbc
+
+Public Class frmPruebaConexion
+    Private Sub btnProbarConexion_Click(sender As Object, e As EventArgs) Handles btnProbarConexion.Click
+
+        Dim conODBC As New OdbcConnection("dsn=MyConexionOdbc;uid=root;pwd=root;")
+        Try
+            conODBC.Open()
+            MsgBox("Conexión Exitosa !")
+            conODBC.Close()
+        Catch ex As Exception
+            MsgBox("Error : " & ex.Message)
+        End Try
+
+    End Sub
+
+    Private Sub btnCargarGrilla_Click(sender As Object, e As EventArgs) Handles btnCargarGrilla.Click
+
+        Dim conODBC As New OdbcConnection("dsn=MyConexionOdbc;uid=root;pwd=root;")
+        Dim dt As DataTable
+        Dim da As OdbcDataAdapter
+        Dim ds As New DataSet
+        Dim consulta As String = "SELECT * FROM personas"
+        Try
+            da = New OdbcDataAdapter(consulta, conODBC)
+            conODBC.Open()
+            da.Fill(ds)
+            conODBC.Close()
+            dt = ds.Tables(0)
+            gvPersonas.DataSource = dt
+
+            'Tambien pordemos hacerlo de esta manera
+            'gvPersonas.DataSource = ds.Tables(0)
+
+        Catch ex As Exception
+            MsgBox("Error : " & ex.Message)
+        End Try
+
+
+
+    End Sub
+
+    Private Sub btnCargarGrillaConCommand_Click(sender As Object, e As EventArgs) Handles btnCargarGrillaConCommand.Click
+
+        Dim conODBC As New OdbcConnection("dsn=MyConexionOdbc;uid=root;pwd=root;")
+        Dim dt As New DataTable
+        Dim consulta As String = "SELECT * FROM personas"
+        Try
+            'Creamos el DbCommand.
+            Dim command As New OdbcCommand(consulta, conODBC)
+
+            ' Abrimos la Conexion
+            conODBC.Open()
+
+            ' Guardo los registros que devolvio la consulta por 
+            ' intermedio del ObdcCommand y los guardo en el OdbcDataReader
+            Dim reader As OdbcDataReader = command.ExecuteReader()
+
+            ' Por el metodo Load() del datataTable 
+            ' guardo los datos recibidos
+            dt.Load(reader)
+
+            ' Cerramos la Conexion
+            conODBC.Close()
+
+            ' Asigno al Datasource el contenido del DataTable
+            gvPersonas.DataSource = dt
+
+        Catch ex As Exception
+            MsgBox("Error : " & ex.Message)
+        End Try
+
+    End Sub
+End Class
