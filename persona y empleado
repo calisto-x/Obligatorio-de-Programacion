@@ -1,0 +1,115 @@
+  Public Cedula As Integer
+    Public Nombre As String
+    Public Direccion As String
+    Public Tel As Integer
+
+    Public Sub New()
+
+    End Sub
+
+    Public Sub New(ByVal ci As Integer, ByVal Nomb As String, ByVal dir As String, ByVal tele As Integer)
+        Me.Cedula = ci
+        Me.Nombre = Nomb
+        Me.Direccion = dir
+        Me.Tel = tele
+    End Sub
+    'Setters & Getters
+    Function GetCedula() As Integer
+        Return Me.Cedula
+    End Function
+    Function SetCedula(ByVal cedula) As String
+        Me.Cedula = cedula
+        Return Nothing
+    End Function
+    Function GetNombre() As String
+        Return Me.Nombre
+    End Function
+    Function SetNombre(ByVal nombre) As String
+        Me.Nombre = nombre
+        Return Nothing
+    End Function
+    Function GetDirection() As String
+        Return Me.Direccion
+    End Function
+    Function SetDirection(ByVal direction) As String
+        Me.Direccion = direction
+        Return Nothing
+    End Function
+    Function GetTelefono() As Integer
+        Return Me.Tel
+    End Function
+    Function SetTelefono(ByVal telefono) As Integer
+        Me.Tel = telefono
+        Return Nothing
+    End Function
+
+End Class
+
+ 'Atributos
+    Private Sueldo As Double
+    Private Puesto As String
+    'Constructor
+    Public Sub New()
+
+    End Sub
+
+    Public Sub New(ci As Integer, ByVal Nomb As String, ByVal dir As String, ByVal tele As Integer, ByVal sueldo As Double, ByVal puesto As String)
+        Cedula = ci
+        Nombre = Nomb
+        Direccion = dir
+        Tel = tele
+        Me.Sueldo = sueldo
+        Me.Puesto = puesto
+    End Sub
+
+    Function GetSueldo() As Double
+        Return Me.Sueldo
+    End Function
+    Function SetSueldo(ByVal sueldo) As Double
+        Me.Sueldo = sueldo
+        Return Nothing
+    End Function
+    Function GetPuesto() As String
+        Return Me.Puesto
+    End Function
+    Function SetPuesto(ByVal puesto) As String
+        Me.Puesto = puesto
+        Return Nothing
+    End Function
+
+    'Funciones
+    Function Incremento() As Double
+        If Me.GetPuesto = "gerente" Then
+            Dim num1 As Double
+            Dim resultado1 As Double
+            Dim resultado2 As Double
+            Dim resultadofin As Double
+            num1 = Me.GetSueldo
+            resultado1 = num1 * 97
+            resultado2 = resultado1 / 100
+            resultadofin = num1 + resultado2
+            Return Me.SetSueldo(resultadofin)
+        ElseIf Me.GetPuesto = "operario" Then
+            Dim num2 As Double
+            Dim resultado3 As Double
+            Dim resultado4 As Double
+            Dim resultadofina As Double
+            num2 = Me.GetSueldo
+            resultado3 = num2 * 38
+            resultado4 = resultado3 / 100
+            resultadofina = num2 + resultado4
+            Return Me.SetSueldo(resultadofina)
+        ElseIf Me.GetPuesto = "administrativo" Then
+            Dim num3 As Double
+            Dim resultado5 As Double
+            Dim resultado6 As Double
+            Dim resultadofin As Double
+            num3 = Me.GetSueldo
+            resultado5 = num3 * 27
+            resultado6 = resultado5 / 100
+            resultadofin = num3 + resultado6
+            Return Me.SetSueldo(resultadofin)
+        End If
+    End Function
+
+End Class
